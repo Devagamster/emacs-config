@@ -293,7 +293,15 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   (server-start)
-  )
+  (evil-leader/set-key
+    "wy" 'split-window-right
+    "wu" 'split-window-below
+    "wi" 'split-window-below-and-focus
+    "wo" 'split-window-right-and-focus
+    "fn" 'new-frame
+    "kf" 'delete-frame
+    "kw" 'delete-window
+    "fm" 'spacemacs/toggle-maximize-on))
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
