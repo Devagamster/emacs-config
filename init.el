@@ -30,8 +30,7 @@ values."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '((mu4e :variables
-           mu4e-installation-path "c:/dev/Tools/mu4e")
+   '(gnus
      ruby
      typescript
      html
@@ -286,7 +285,22 @@ executes.
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
   (setq
-   org-agenda-skip-deadline-prewarning-if-scheduled t))
+   org-agenda-skip-deadline-prewarning-if-scheduled t
+   gnus-secondary-select-methods
+   '((nnimap "the-simmons"
+             (nnimap-address "imap.gmail.com")
+             (nnimap-server-port 993)
+             (nnimap-stream ssl))
+     (nnimap "uw"
+             (nnimap-address "imap.gmail.com")
+             (nnimap-server-port 993)
+             (nnimap-stream ssl)))
+   message-send-mail-function 'smtpmail-send-it
+   smtpmail-default-smtp-server "smtp.gmail.com"
+   gnus-message-archive-method '(nnimap "imap.gmail.com")
+   gnus-message-archive-group "[Gmail]/Send Mail"
+   nnml-directory "c:/dev/Mail/"
+   message-directory "c:/dev/Mail/"))
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
