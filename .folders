@@ -1,0 +1,11 @@
+Simmons {
+        .Simmons/INBOX "Inbox"
+        .Simmons/[Gmail].Sent Mail "Sent"
+        .Simmons/[Gmail].Trash "Trash"
+}
+
+School {
+        .School/INBOX "Inbox"
+        .School/[Gmail].Sent Mail "Sent"
+        .School/[Gmail].Trash "Trash"
+}
