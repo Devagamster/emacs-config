@@ -287,6 +287,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
   (setq
    org-agenda-skip-deadline-prewarning-if-scheduled t
+   ; gnus
    gnus-secondary-select-methods
    '((nnimap "the-simmons"
              (nnimap-address "imap.gmail.com")
@@ -301,7 +302,24 @@ before packages are loaded. If you are unsure, you should try in setting them in
    gnus-message-archive-method '(nnimap "imap.gmail.com")
    gnus-message-archive-group "[Gmail]/Send Mail"
    nnml-directory "c:/dev/Mail/"
-   message-directory "c:/dev/Mail/"))
+   message-directory "c:/dev/Mail/"
+
+   ; wanderlust
+   elmo-maildir-folder-path "c:/dev/Mail/"
+
+   wl-stay-folder-window t
+   wl-folder-window-width 25
+
+   wl-smtp-connection-type 'starttls
+   wl-smtp-posting-port 587
+   wl-smtp-authenticate-type "plain"
+   wl-smtp-posting-user "keith@the-simmons.net"
+   wl-smtp-posting-server "smtp.gmail.com"
+   wl-local-domain "the-simmons.net"
+
+   wl-from "Keith <keith@the-simmons.net>"
+
+   wl-folder-check-async t))
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
@@ -348,7 +366,7 @@ you should place your code here."
  '(org-agenda-window-setup (quote current-window))
  '(package-selected-packages
    (quote
-    (mu4e-maildirs-extension mu4e-alert ht rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby smeargle orgit org-projectile pcache org-present org org-pomodoro alert log4e gntp org-download magit-gitflow htmlize helm-gitignore helm-company helm-c-yasnippet gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip evil-magit magit magit-popup git-commit with-editor company-web web-completion-data company-tern dash-functional tern company-statistics company auto-yasnippet auto-dictionary ac-ispell auto-complete tide typescript-mode flycheck web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode powershell web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode racket-mode faceup ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide ido-vertical-mode hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f s diminish define-word column-enforce-mode clean-aindent-mode bracketed-paste bind-map bind-key auto-highlight-symbol auto-compile packed dash aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async quelpa package-build spacemacs-theme)))
+    (wanderlust semi flim apel mu4e-maildirs-extension mu4e-alert ht rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby smeargle orgit org-projectile pcache org-present org org-pomodoro alert log4e gntp org-download magit-gitflow htmlize helm-gitignore helm-company helm-c-yasnippet gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip evil-magit magit magit-popup git-commit with-editor company-web web-completion-data company-tern dash-functional tern company-statistics company auto-yasnippet auto-dictionary ac-ispell auto-complete tide typescript-mode flycheck web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode powershell web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode racket-mode faceup ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide ido-vertical-mode hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f s diminish define-word column-enforce-mode clean-aindent-mode bracketed-paste bind-map bind-key auto-highlight-symbol auto-compile packed dash aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async quelpa package-build spacemacs-theme)))
  '(password-cache-expiry nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

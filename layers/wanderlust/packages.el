@@ -30,33 +30,36 @@
 ;;; Code:
 
 (defconst wanderlust-packages
-  '(wanderlust)
-  "The list of Lisp packages required by the wanderlust layer.
+  '(wanderlust))
 
-Each entry is either:
-
-1. A symbol, which is interpreted as a package to be installed, or
-
-2. A list of the form (PACKAGE KEYS...), where PACKAGE is the
-    name of the package to be installed or loaded, and KEYS are
-    any number of keyword-value-pairs.
-
-    The following keys are accepted:
-
-    - :excluded (t or nil): Prevent the package from being loaded
-      if value is non-nil
-
-    - :location: Specify a custom installation location.
-      The following values are legal:
-
-      - The symbol `elpa' (default) means PACKAGE will be
-        installed using the Emacs package manager.
-
-      - The symbol `local' directs Spacemacs to load the file at
-        `./local/PACKAGE/PACKAGE.el'
-
-      - A list beginning with the symbol `recipe' is a melpa
-        recipe.  See: https://github.com/milkypostman/melpa#recipe-format")
-
-
-;;; packages.el ends here
+(defun wanderlust/init-wanderlust ()
+  (progn
+    (spacemacs/set-leader-keys (kbd "a w") 'wl)
+    (evil-define-key 'normal wl-folder-mode-map
+      (kbd "RET") 'wl-folder-jump-to-current-entity
+      (kbd "M-RET") 'wl-folder-update-recursive-current-entity
+      (kbd "w") 'wl-draft
+      (kbd "s") 'wl-folder-check-current-entity
+      (kbd "S") 'wl-folder-sync-current-entity
+      (kbd "K") 'wl-folder-prev-unread
+      (kbd "J") 'wl-folder-next-unread
+      (kbd "L") 'wl-folder-open-all
+      (kbd "H") 'wl-folder-close-all
+      (kbd "q") 'wl-exit
+      (kbd "c") 'wl-folder-suspend)
+    (evil-define-key 'visual wl-folder-mode-map
+      (kbd "s") 'wl-folder-check-region
+      (kbd "S") 'wl-folder-sync-region)
+    (evil-define-key 'normal wl-summary-mode-map
+      (kbd "RET") 'wl-summary-read
+      (kbd ".") 'wl-summary-redisplay
+      (kbd "C-k") 'wl-summary-prev-line-content
+      (kbd "C-j") 'wl-summary-next-line-content
+      (kbd "TAB") 'wl-thread-open-close
+      (kbd "r") 'wl-summary-reply
+      (kbd "R") 'wl-summary-reply-with-citation
+      (kbd "w") 'wl-summary-write
+      (kbd "f") 'wl-summary-forward
+      (kbd "q") 'wl-summary-exit
+      (kbd "H") 'wl-summary-jump-to-parent-message
+      (kbd "u") 'wl-summary-mark-as-unread)))
