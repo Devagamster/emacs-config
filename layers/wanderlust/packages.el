@@ -30,10 +30,45 @@
 ;;; Code:
 
 (defconst wanderlust-packages
-  '(wanderlust))
+  '(wanderlust bbdb-wl))
+
+(defun wl-draft-subject-check ()
+  "check whether the message has a subject before sending"
+  (if (and (< (length (std11-field-body "Subject")) 1)
+           (null (y-or-n-p "No subject! Send current draft?")))
+      (error "Abort.")))
+
+
+;; note, this check could cause some false positives; anyway, better
+;; safe than sorry...
+(defun wl-draft-attachment-check ()
+  "if attachment is mention but none included, warn the the user"
+  (save-excursion
+    (goto-char 0)
+    (unless ;; don't we have an attachment?
+
+        (re-search-forward "^Content-Disposition: attachment" nil t)
+      (when ;; no attachment; did we mention an attachment?
+          (re-search-forward "attach" nil t)
+        (unless (y-or-n-p "Possibly missing an attachment. Send current draft?")
+          (error "Abort."))))))
 
 (defun wanderlust/init-wanderlust ()
   (progn
+    (setq wl-draft-reply-without-argument-list
+          '(("Reply-To" ("Reply-To") nil nil)
+            ("Mail-Reply-To" ("Mail-Reply-To") nil nil)
+            ("From" ("From") nil nil)))
+
+    (add-hook 'wl-mail-send-pre-hook 'wl-draft-subject-check)
+    (add-hook 'wl-mail-send-pre-hook 'wl-draft-attachment-check)
+
+    ;; bombard the world
+    (setq wl-draft-reply-with-argument-list
+          '(("Followup-To" nil nil ("Followup-To"))
+            ("Mail-Followup-To" ("Mail-Followup-To") nil ("Newsgroups"))
+            ("Reply-To" ("Reply-To") ("To" "Cc" "From") ("Newsgroups"))
+            ("From" ("From") ("To" "Cc") ("Newsgroups"))))
     (spacemacs/set-leader-keys (kbd "a w") 'wl)
     (evil-define-key 'normal wl-folder-mode-map
       (kbd "RET") 'wl-folder-jump-to-current-entity
@@ -53,6 +88,10 @@
     (evil-define-key 'normal wl-summary-mode-map
       (kbd "RET") 'wl-summary-read
       (kbd ".") 'wl-summary-redisplay
+      (kbd "i") 'wl-summary-mark-as-important
+      (kbd "M i") 'wl-summary-target-mark-mark-as-important
+      (kbd "C-h") 'wl-summary-exit
+      (kbd "C-l") 'wl-summary-jump-to-current-message
       (kbd "C-k") 'wl-summary-prev-line-content
       (kbd "C-j") 'wl-summary-next-line-content
       (kbd "TAB") 'wl-thread-open-close
@@ -62,4 +101,27 @@
       (kbd "f") 'wl-summary-forward
       (kbd "q") 'wl-summary-exit
       (kbd "H") 'wl-summary-jump-to-parent-message
-      (kbd "u") 'wl-summary-mark-as-unread)))
+      (kbd "u") 'wl-summary-mark-as-unread
+      (kbd "M u") 'wl-summary-target-mark-mark-as-unread
+      (kbd "m") 'wl-summary-target-mark-line
+      (kbd "d") 'wl-summary-dispose
+      (kbd "M d") 'wl-summary-target-mark-delete
+      (kbd "o") 'wl-summary-refile
+      (kbd "x") 'wl-execute-temp-marks)
+    (evil-define-key 'visual wl-summary-mode-map
+      (kbd "d") 'wl-summary-dispose-region
+      (kbd "u") 'wl-summary-mark-as-unread
+      (kbd "i") 'wl-summary-mark-as-important
+      (kbd "m") 'wl-summary-target-mark-region
+      (kbd "o") 'wl-summary-refile-region)))
+
+(when (configuration-layer/package-usedp 'bbdb)
+  (defun bbdb/init-bbdb-wl ()
+    (use-package bbdb-wl
+      :config
+      (bbdb-wl-setup))))
+
+(when (configuration-layer/package-usedp 'company)
+  (when (configuration-layer/package-usedp 'bbdb)
+    (defun bbdb/post-init-bbdb ()
+      (add-hook 'wl-draft-mode-hook 'company-mode))))
