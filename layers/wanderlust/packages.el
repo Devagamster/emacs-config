@@ -30,7 +30,7 @@
 ;;; Code:
 
 (defconst wanderlust-packages
-  '(wanderlust bbdb-wl))
+  '(wanderlust bbdb-wl filladapt))
 
 (defun wl-draft-subject-check ()
   "check whether the message has a subject before sending"
@@ -38,6 +38,36 @@
            (null (y-or-n-p "No subject! Send current draft?")))
       (error "Abort.")))
 
+(defun wl-summary-fill-message (all)
+  (interactive "P")
+  (if (and wl-message-buffer (get-buffer-window wl-message-buffer))
+      (progn
+        (wl-summary-toggle-disp-msg 'on)
+        (save-excursion
+          (set-buffer wl-message-buffer)
+          (goto-char (point-min))
+          (re-search-forward "^$")
+          (while (or (looking-at "^\\[[1-9]") (looking-at "^$"))
+            (forward-line 1))
+          (let* ((buffer-read-only nil)
+                 (find (lambda (regexp)
+                         (save-excursion
+                           (if (re-search-forward regexp nil t)
+                               (match-beginning 0)
+                             (point-max)))))
+                 (start (point))
+                 (end (if all
+                          (point-max)
+                        (min (funcall find "^[^>\n]* wrote:[ \n]+")
+                             (funcall find "^>>>>>")
+                             (funcall find "^ *>.*\n *>")
+                             (funcall find "^-----Original Message-----")))))
+            (save-restriction
+              (narrow-to-region start end)
+              (filladapt-mode 1)
+              (fill-region (point-min) (point-max)))))
+        (message "Message re-filled"))
+    (message "No message to re-fill")))
 
 ;; note, this check could cause some false positives; anyway, better
 ;; safe than sorry...
@@ -99,6 +129,7 @@
       (kbd "R") 'wl-summary-reply-with-citation
       (kbd "w") 'wl-summary-write
       (kbd "f") 'wl-summary-forward
+      (kbd "F") 'wl-summary-fill-message
       (kbd "q") 'wl-summary-exit
       (kbd "H") 'wl-summary-jump-to-parent-message
       (kbd "u") 'wl-summary-mark-as-unread
@@ -114,6 +145,10 @@
       (kbd "i") 'wl-summary-mark-as-important
       (kbd "m") 'wl-summary-target-mark-region
       (kbd "o") 'wl-summary-refile-region)))
+
+(defun wanderlust/init-filladapt ()
+  (use-package filladapt
+    :load-path "~/.spacemacs.d/layers/wanderlust"))
 
 (when (configuration-layer/package-usedp 'bbdb)
   (defun bbdb/init-bbdb-wl ()
