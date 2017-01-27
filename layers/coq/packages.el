@@ -22,7 +22,16 @@
   (use-package proof-site
     :defer t
     :mode ("\\.v\\'" . coq-mode)
-    :load-path "~/.spacemacs.d/layers/coq/proof-general/generic"))
+    :load-path "~/.spacemacs.d/layers/coq/proof-general/generic"
+    :config
+    (progn
+      (add-hook 'coq-mode-hook 'company-coq-mode)
+      (spacemacs/set-leader-keys-for-major-mode 'coq-mode
+        "e l" 'proof-goto-point
+        "e k" 'proof-undo-last-successful-command-1
+        "e j" 'proof-assert-next-command-interactive
+        "g g" 'company-coq-jump-to-definition
+        "h" 'company-coq-toggle-definition-overlay))))
 
 (defun coq/init-company-coq ()
   (use-package company-coq
