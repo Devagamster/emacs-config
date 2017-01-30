@@ -35,20 +35,43 @@
 
 (defun wanderlust/init-wanderlust ()
   (progn
-    (setq wl-draft-reply-without-argument-list
-          '(("Reply-To" ("Reply-To") nil nil)
-            ("Mail-Reply-To" ("Mail-Reply-To") nil nil)
-            ("From" ("From") nil nil)))
-
     (add-hook 'wl-mail-send-pre-hook 'wl-draft-subject-check)
     (add-hook 'wl-mail-send-pre-hook 'wl-draft-attachment-check)
 
-    ;; bombard the world
-    (setq wl-draft-reply-with-argument-list
+    (setq
+      wl-draft-reply-without-argument-list
+          '(("Reply-To" ("Reply-To") nil nil)
+            ("Mail-Reply-To" ("Mail-Reply-To") nil nil)
+            ("From" ("From") nil nil))
+      wl-message-ignored-field-list '("^.*:")
+      wl-message-visible-field-list
+      '("^\\(To\\|Cc\\):"
+        "^Subject:"
+        "^\\(From\\|Reply-To\\):"
+        "^Organization:"
+        "^\\(Posted\\|Date\\):"
+        )
+      wl-message-sort-field-list
+      '("^From"
+        "^Organization:"
+        "^X-Attribution:"
+        "^Subject"
+        "^Date"
+        "^To"
+        "^Cc")
+      wl-stay-folder-window t
+      wl-folder-window-width 25
+      wl-forward-subject-prefix "Fwd: "
+      wl-biff-check-interval 180
+      wl-biff-check-delay 10
+      wl-biff-use-idle-timer nil
+      wl-folder-check-async t
+      wl-draft-reply-with-argument-list
           '(("Followup-To" nil nil ("Followup-To"))
             ("Mail-Followup-To" ("Mail-Followup-To") nil ("Newsgroups"))
             ("Reply-To" ("Reply-To") ("To" "Cc" "From") ("Newsgroups"))
             ("From" ("From") ("To" "Cc") ("Newsgroups"))))
+
     (spacemacs/set-leader-keys (kbd "a w") 'wl)
     (evil-define-key 'normal wl-folder-mode-map
       (kbd "RET") 'wl-folder-jump-to-current-entity
@@ -75,6 +98,7 @@
       (kbd "C-k") 'wl-summary-prev-line-content
       (kbd "C-j") 'wl-summary-next-line-content
       (kbd "TAB") 'wl-thread-open-close
+      (kbd "ss") 'wl-summary-auto-refile
       (kbd "r") 'wl-summary-reply
       (kbd "R") 'wl-summary-reply-with-citation
       (kbd "w") 'wl-summary-write

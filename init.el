@@ -31,7 +31,8 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     ocamlcoq
+     ocaml
+     coq
      rust
      bbdb
      wanderlust
@@ -290,6 +291,8 @@ executes.
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
   (setq
+   mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil))
+   mouse-wheel-progressive-speed nil
    custom-file "~/.spacemacs.d/custom.el"
    org-agenda-skip-deadline-prewarning-if-scheduled t
    backup-directory-alist
@@ -301,9 +304,6 @@ before packages are loaded. If you are unsure, you should try in setting them in
    elmo-maildir-folder-path "c:/dev/Mail/"
    wl-folders-file "~/.spacemacs.d/.folders"
 
-   wl-stay-folder-window t
-   wl-folder-window-width 25
-   wl-forward-subject-prefix "Fwd: "
 
    wl-smtp-connection-type 'starttls
    wl-smtp-posting-port 587
@@ -316,31 +316,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
    wl-biff-check-folder-list '(".School/INBOX" ".Simmons/INBOX") ;; check every 180 seconds
    ;; (default: wl-biff-check-interval)
 
-   ;; hide many fields from message buffers
-   wl-message-ignored-field-list '("^.*:")
-   wl-message-visible-field-list
-   '("^\\(To\\|Cc\\):"
-     "^Subject:"
-     "^\\(From\\|Reply-To\\):"
-     "^Organization:"
-     "^\\(Posted\\|Date\\):"
-     )
-   wl-message-sort-field-list
-   '("^From"
-     "^Organization:"
-     "^X-Attribution:"
-     "^Subject"
-     "^Date"
-     "^To"
-     "^Cc")
-
    wl-from "Keith <keith@the-simmons.net>"
-
-   ;; Make things faster
-   wl-biff-check-interval 180
-   wl-biff-check-delay 10
-   wl-biff-use-idle-timer nil
-   wl-folder-check-async t
 
    ;; Don't split messages
    mime-edit-split-message nil
@@ -384,7 +360,24 @@ you should place your code here."
     "kf" 'delete-frame
     "kw" 'delete-window
     "fm" 'spacemacs/toggle-maximize-on
-    "s SPC" 'hydra-scrolling/body)
-  (setq
-   mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil))
-   mouse-wheel-progressive-speed nil))
+    "s SPC" 'hydra-scrolling/body))
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide ido-vertical-mode hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-purpose window-purpose imenu-list helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed dash aggressive-indent ace-window ace-link ace-jump-helm-line helm avy helm-core popup async quelpa package-build spacemacs-theme))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+)
