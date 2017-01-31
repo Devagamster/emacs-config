@@ -13,7 +13,7 @@
 
 (defconst coq-packages
   '(
-    (proof-general :location "~/.spacemacs.d/layers/coq/proof-general")
+    (proof-general :location "~/.spacemacs.d/layers/coq/PG")
     company-coq
     ))
 
@@ -22,7 +22,7 @@
   (use-package proof-site
     :defer t
     :mode ("\\.v\\'" . coq-mode)
-    :load-path "~/.spacemacs.d/layers/coq/proof-general/generic"
+    :load-path "~/.spacemacs.d/layers/coq/PG/generic"
     :config
     (progn
       (add-hook 'coq-mode-hook 'company-coq-mode)
