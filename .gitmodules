@@ -1,0 +1,3 @@
+[submodule "layers/coq/PG"]
+	path = layers/coq/PG
+	url = https://github.com/ProofGeneral/PG
