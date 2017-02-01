@@ -30,19 +30,15 @@ values."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
-     javascript
+   '(javascript
      ocaml
      coq
      rust
      bbdb
      wanderlust
      ruby
-     coffeescript
-     ;; typescript
      html
      windows-scripts
-     ;; javascript
      racket
      helm
      auto-completion
@@ -293,8 +289,9 @@ executes.
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
   (setq
-   custom-file "~/.spacemacs.d/custom.el"
    org-agenda-skip-deadline-prewarning-if-scheduled t
+   org-agenda-skip-scheduled-if-done t
+
    backup-directory-alist
          `((".*" . "c:/dev/Temp"))
    auto-save-file-name-transforms
@@ -303,10 +300,6 @@ before packages are loaded. If you are unsure, you should try in setting them in
    ; wanderlust
    elmo-maildir-folder-path "c:/dev/Mail/"
    wl-folders-file "~/.spacemacs.d/.folders"
-
-   wl-stay-folder-window t
-   wl-folder-window-width 25
-   wl-forward-subject-prefix "Fwd: "
 
    wl-smtp-connection-type 'starttls
    wl-smtp-posting-port 587
@@ -317,36 +310,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
 
    ;; check this folder periodically, and update modeline
    wl-biff-check-folder-list '(".School/INBOX" ".Simmons/INBOX") ;; check every 180 seconds
-   ;; (default: wl-biff-check-interval)
-
-   ;; hide many fields from message buffers
-   wl-message-ignored-field-list '("^.*:")
-   wl-message-visible-field-list
-   '("^\\(To\\|Cc\\):"
-     "^Subject:"
-     "^\\(From\\|Reply-To\\):"
-     "^Organization:"
-     "^\\(Posted\\|Date\\):"
-     )
-   wl-message-sort-field-list
-   '("^From"
-     "^Organization:"
-     "^X-Attribution:"
-     "^Subject"
-     "^Date"
-     "^To"
-     "^Cc")
-
    wl-from "Keith <keith@the-simmons.net>"
-
-   ;; Make things faster
-   wl-biff-check-interval 180
-   wl-biff-check-delay 10
-   wl-biff-use-idle-timer nil
-   wl-folder-check-async t
-
-   ;; Don't split messages
-   mime-edit-split-message nil
 
    org-agenda-files (quote ("c:/dev/Projects/Logs/todo.org"))
    org-agenda-restore-windows-after-quit t
@@ -356,7 +320,11 @@ before packages are loaded. If you are unsure, you should try in setting them in
    wl-dispose-folder-alist
     (quote
      (("^\\.Simmons" . ".Simmons/[Gmail].Trash")
-      ("^\\.School" . ".School/[Gmail].Trash")))))
+      ("^\\.School" . ".School/[Gmail].Trash")))
+  org-agenda-custom-commands
+  '(("a" "Weekly agenda"
+     ((agenda "" ((org-agenda-ndays 7)))
+      (tags-todo "THISWEEK|URGENT"))))))
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
@@ -379,6 +347,7 @@ you should place your code here."
     ("L" (evil-scroll-page-down 2) "scroll 2 pages down")
     ("H" (evil-scroll-page-up 2) "scroll 2 pages up"))
   (evil-leader/set-key
+    "oa" 'keith/custom-agenda
     "wy" 'split-window-right
     "wi" 'split-window-below
     "wu" 'split-window-below-and-focus
@@ -391,3 +360,22 @@ you should place your code here."
   (setq
    mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil))
    mouse-wheel-progressive-speed nil))
+
+(defun keith/custom-agenda (&optional arg)
+  (interactive "P")
+  (org-agenda arg "a"))
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (web-beautify utop tuareg caml ocp-indent merlin livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern dash-functional tern company-coq company-math math-symbol-lists coffee-mode ws-butler window-numbering which-key web-mode wanderlust volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org tagedit spacemacs-theme spaceline smeargle slim-mode scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe restart-emacs rbenv rake rainbow-delimiters racket-mode racer quelpa pug-mode powershell popwin persp-mode paradox orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file neotree move-text minitest magit-gitflow macrostep lorem-ipsum linum-relative link-hint less-css-mode info+ indent-guide ido-vertical-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link flyspell-correct-helm flycheck-rust flycheck-pos-tip flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump dtrt-indent define-word company-web company-statistics company-auctex column-enforce-mode clean-aindent-mode chruby cargo bundler bbdb auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
