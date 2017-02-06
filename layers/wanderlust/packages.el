@@ -70,7 +70,8 @@
           '(("Followup-To" nil nil ("Followup-To"))
             ("Mail-Followup-To" ("Mail-Followup-To") nil ("Newsgroups"))
             ("Reply-To" ("Reply-To") ("To" "Cc" "From") ("Newsgroups"))
-            ("From" ("From") ("To" "Cc") ("Newsgroups"))))
+            ("From" ("From") ("To" "Cc") ("Newsgroups")))
+      mime-edit-split-message nil)
 
     (spacemacs/set-leader-keys (kbd "a w") 'wl)
     (evil-define-key 'normal wl-folder-mode-map
