@@ -1,8 +1,8 @@
 (defconst frame-move-packages
-  '((frame-move :location local)))
+  '((framemove :location local)))
 
-(defun frame-move/init-frame-move ()
-  (use-package frame-move
+(defun frame-move/init-framemove ()
+  (use-package framemove
     :init
     (setq framemove-hook-into-windmove t)))
 
