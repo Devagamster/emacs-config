@@ -324,7 +324,9 @@ before packages are loaded. If you are unsure, you should try in setting them in
   org-agenda-custom-commands
   '(("a" "Weekly agenda"
      ((agenda "" ((org-agenda-ndays 7)))
-      (tags-todo "THISWEEK|URGENT"))))))
+      (tags-todo "EFFORT={.+}+THISWEEK|URGENT"
+                 ((org-agenda-sorting-strategy '(effort-up))))
+      (tags-todo "EFFORT<>{.+}+THISWEEK|URGENT"))))))
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
