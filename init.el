@@ -135,7 +135,7 @@ values."
                                :size ,(if (file-exists-p "~/.highdpi") 25 12)
                                :weight normal
                                :width normal
-                               :powerline-scale ,(if (eq system-type 'gnu/linux) 1.8 1.1))
+                               :powerline-scale 1.1)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The key used for Emacs commands (M-x) (after pressing on the leader key).
@@ -226,7 +226,7 @@ values."
    ;; If non nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup t
+   dotspacemacs-maximized-at-startup nil
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
@@ -269,7 +269,7 @@ values."
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `ag', `pt', `ack' and `grep'.
    ;; (default '("ag" "pt" "ack" "grep"))
-   dotspacemacs-search-tools '("ag" "pt" "ack" "grep")
+   dotspacemacs-search-tools '("pt")
    ;; The default package repository used if no explicit repository has been
    ;; specified with an installed package.
    ;; Not used for now. (default nil)
@@ -289,13 +289,12 @@ executes.
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
   (setq
-   org-agenda-skip-deadline-prewarning-if-scheduled t
-   org-agenda-skip-scheduled-if-done t
+   ;; server-socket-dir "~/server/"
 
    backup-directory-alist
-         `((".*" . "c:/dev/Temp"))
+   `((".*" . ,(if (eq system-type 'gnu/linux) "/mnt/c/dev/Temp/" "c:/dev/Temp")))
    auto-save-file-name-transforms
-         `((".*" "c:/dev/Temp" t))
+   `((".*" ,(if (eq system-type 'gnu/linux) "/mnt/c/dev/Temp/" "c:/dev/Temp") t))
 
    ; wanderlust
    elmo-maildir-folder-path "c:/dev/Mail/"
@@ -312,21 +311,26 @@ before packages are loaded. If you are unsure, you should try in setting them in
    wl-biff-check-folder-list '(".School/INBOX" ".Simmons/INBOX") ;; check every 180 seconds
    wl-from "Keith <keith@the-simmons.net>"
 
-   org-agenda-files (quote ("c:/dev/Projects/Logs/todo.org"))
+   password-cache-expiry nil
+   wl-dispose-folder-alist
+   (quote
+    (("^\\.Simmons" . ".Simmons/[Gmail].Trash")
+     ("^\\.School" . ".School/[Gmail].Trash")))
+
+   org-agenda-skip-deadline-prewarning-if-scheduled t
+   org-agenda-skip-scheduled-if-done t
+
+   org-agenda-files (if (eq system-type 'gnu/linux) (quote ("/mnt/c/dev/Projects/Logs/todo.org")) (quote ("c:/dev/Projects/Logs/todo.org")))
    org-agenda-restore-windows-after-quit t
    org-agenda-skip-deadline-prewarning-if-scheduled t
    org-agenda-window-setup (quote current-window)
-   password-cache-expiry nil
-   wl-dispose-folder-alist
-    (quote
-     (("^\\.Simmons" . ".Simmons/[Gmail].Trash")
-      ("^\\.School" . ".School/[Gmail].Trash")))
-  org-agenda-custom-commands
-  '(("a" "Weekly agenda"
-     ((agenda "" ((org-agenda-ndays 7)))
-      (tags-todo "EFFORT={.+}+THISWEEK|URGENT"
-                 ((org-agenda-sorting-strategy '(effort-up))))
-      (tags-todo "EFFORT<>{.+}+THISWEEK|URGENT"))))))
+
+   org-agenda-custom-commands
+   '(("a" "Weekly agenda"
+      ((agenda "" ((org-agenda-ndays 7)))
+       (tags-todo "EFFORT={.+}+(THISWEEK|URGENT)"
+                  ((org-agenda-sorting-strategy '(effort-up))))
+       (tags-todo "EFFORT<>{.+}+THISWEEK"))))))
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
