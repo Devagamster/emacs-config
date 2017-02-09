@@ -348,21 +348,10 @@ you should place your code here."
    mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil))
    mouse-wheel-progressive-speed nil
 
-   mu4e-account-alist
-   '(("Simmons"
-      (mu4e-maildir "~/Mail/Simmons/")
-      (mu4e-sent-folder "/[Gmail].Sent Mail")
-      (mu4e-drafts-folder "/[Gmail].Drafts")
-      (mu4e-trash-folder "/[Gmail].Trash")
-      (user-mail-address "keith@the-simmons.net")
-      (user-full-name "Keith Simmons"))
-     ("School"
-      (mu4e-maildir "~/Mail/School/")
-      (mu4e-sent-folder "/[Gmail].Sent Mail")
-      (mu4e-drafts-folder "/[Gmail].Drafts")
-      (mu4e-trash-folder "/[Gmail].Trash")
-      (user-mail-address "keithsim@uw.edu")
-      (user-full-name "Keith Simmons")))
+   mu4e-maildir "~/Mail"
+
+   mu4e-context-policy 'pick-first
+   mu4e compose-context-policy nil
 
    backup-directory-alist
    `((".*" . ,(if (eq system-type 'gnu/linux) "/mnt/c/dev/Temp/" "c:/dev/Temp")))
@@ -381,7 +370,37 @@ you should place your code here."
       ((agenda "" ((org-agenda-ndays 7)))
        (tags-todo "EFFORT={.+}+(THISWEEK|URGENT)"
                   ((org-agenda-sorting-strategy '(effort-up))))
-       (tags-todo "EFFORT<>{.+}+THISWEEK"))))))
+       (tags-todo "EFFORT<>{.+}+THISWEEK")))))
+
+  (with-eval-after-load 'mu4e-context
+    (setq
+     mu4e-contexts
+     `(,(make-mu4e-context
+         :name "School"
+         :enter-func (lambda () (mu4e-message "Entering School Context"))
+         :leave-func (lambda () (mu4e-message "Leaving School Context"))
+         :match-func (lambda (msg)
+                       (when msg
+                         (mu4e-message-contact-field-matches msg
+                                                             :to "keithsim@uw.edu")))
+         :vars '( ( user-mail-address . "keithsim@uw.edu" )
+                  ( user-full-name    . "Jonathan (Keith) Simmons" )
+                  ( mu4e-sent-folder  . "/School/[Gmail].Sent Mail" )
+                  ( mu4e-drafts-folder  . "/School/[Gmail].Drafts" )
+                  ( mu4e-trash-folder  . "/School/[Gmail].Trash" )))
+       ,(make-mu4e-context
+         :name "Home"
+         :enter-func (lambda () (mu4e-message "Entering Home Context"))
+         :leave-func (lambda () (mu4e-message "Leaving Home Context"))
+         :match-func (lambda (msg)
+                       (when msg
+                         (mu4e-message-contact-field-matches msg
+                                                             :to "keith@the-simmons.net")))
+         :vars '( ( user-mail-address . "keith@the-simmons.net")
+                  (user-full-name     . "Keith Simmons")
+                  ( mu4e-sent-folder  . "/Simmons/[Gmail].Sent Mail" )
+                  ( mu4e-drafts-folder  . "/Simmons/[Gmail].Drafts" )
+                  ( mu4e-trash-folder  . "/Simmons/[Gmail].Trash" )))))))
 
 
 (defun keith/custom-agenda (&optional arg)
