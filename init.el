@@ -30,9 +30,9 @@ values."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(javascript
-     ocaml
-     coq
+   `(javascript
+     ,(if (eq system-type 'gnu/linux) 'ocaml)
+     ,(if (eq system-type 'gnu/linux) 'coq)
      rust
      bbdb
      wanderlust
@@ -45,6 +45,8 @@ values."
      emacs-lisp
      git
      org
+     (mu4e :variables
+           mu4e-installation-path "~/mu4e/")
      latex
      spell-checking
      syntax-checking
@@ -289,48 +291,28 @@ executes.
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
   (setq
-   ;; server-socket-dir "~/server/"
-
-   backup-directory-alist
-   `((".*" . ,(if (eq system-type 'gnu/linux) "/mnt/c/dev/Temp/" "c:/dev/Temp")))
-   auto-save-file-name-transforms
-   `((".*" ,(if (eq system-type 'gnu/linux) "/mnt/c/dev/Temp/" "c:/dev/Temp") t))
-
    ; wanderlust
-   elmo-maildir-folder-path "c:/dev/Mail/"
-   wl-folders-file "~/.spacemacs.d/.folders"
+   ;; elmo-maildir-folder-path "c:/dev/Mail/"
+   ;; wl-folders-file "~/.spacemacs.d/.folders"
 
-   wl-smtp-connection-type 'starttls
-   wl-smtp-posting-port 587
-   wl-smtp-authenticate-type "plain"
-   wl-smtp-posting-user "keith@the-simmons.net"
-   wl-smtp-posting-server "smtp.gmail.com"
-   wl-local-domain "the-simmons.net"
+   ;; wl-smtp-connection-type 'starttls
+   ;; wl-smtp-posting-port 587
+   ;; wl-smtp-authenticate-type "plain"
+   ;; wl-smtp-posting-user "keith@the-simmons.net"
+   ;; wl-smtp-posting-server "smtp.gmail.com"
+   ;; wl-local-domain "the-simmons.net"
 
-   ;; check this folder periodically, and update modeline
-   wl-biff-check-folder-list '(".School/INBOX" ".Simmons/INBOX") ;; check every 180 seconds
-   wl-from "Keith <keith@the-simmons.net>"
+   ;; ;; check this folder periodically, and update modeline
+   ;; wl-biff-check-folder-list '(".School/INBOX" ".Simmons/INBOX") ;; check every 180 seconds
+   ;; wl-from "Keith <keith@the-simmons.net>"
 
-   password-cache-expiry nil
-   wl-dispose-folder-alist
-   (quote
-    (("^\\.Simmons" . ".Simmons/[Gmail].Trash")
-     ("^\\.School" . ".School/[Gmail].Trash")))
-
-   org-agenda-skip-deadline-prewarning-if-scheduled t
-   org-agenda-skip-scheduled-if-done t
-
-   org-agenda-files (if (eq system-type 'gnu/linux) (quote ("/mnt/c/dev/Projects/Logs/todo.org")) (quote ("c:/dev/Projects/Logs/todo.org")))
-   org-agenda-restore-windows-after-quit t
-   org-agenda-skip-deadline-prewarning-if-scheduled t
-   org-agenda-window-setup (quote current-window)
-
-   org-agenda-custom-commands
-   '(("a" "Weekly agenda"
-      ((agenda "" ((org-agenda-ndays 7)))
-       (tags-todo "EFFORT={.+}+(THISWEEK|URGENT)"
-                  ((org-agenda-sorting-strategy '(effort-up))))
-       (tags-todo "EFFORT<>{.+}+THISWEEK"))))))
+   ;; password-cache-expiry nil
+   ;; wl-dispose-folder-alist
+   ;; (quote
+   ;;  (("^\\.Simmons" . ".Simmons/[Gmail].Trash")
+   ;;   ("^\\.School" . ".School/[Gmail].Trash")))
+   (setq
+    mu4e-maildir "~/Mail")))
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
@@ -365,7 +347,45 @@ you should place your code here."
     "s SPC" 'hydra-scrolling/body)
   (setq
    mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil))
-   mouse-wheel-progressive-speed nil))
+   mouse-wheel-progressive-speed nil
+
+   mu4e-account-alist
+   '(("Simmons"
+      (mu4e-maildir "~/Mail/Simmons/")
+      (mu4e-sent-folder "/[Gmail].Sent Mail")
+      (mu4e-drafts-folder "/[Gmail].Drafts")
+      (mu4e-trash-folder "/[Gmail].Trash")
+      (user-mail-address "keith@the-simmons.net")
+      (user-full-name "Keith Simmons"))
+     ("School"
+      (mu4e-maildir "~/Mail/School/")
+      (mu4e-sent-folder "/[Gmail].Sent Mail")
+      (mu4e-drafts-folder "/[Gmail].Drafts")
+      (mu4e-trash-folder "/[Gmail].Trash")
+      (user-mail-address "keithsim@uw.edu")
+      (user-full-name "Keith Simmons")))
+
+   mu4e-contexts
+
+   backup-directory-alist
+   `((".*" . ,(if (eq system-type 'gnu/linux) "/mnt/c/dev/Temp/" "c:/dev/Temp")))
+   auto-save-file-name-transforms
+   `((".*" ,(if (eq system-type 'gnu/linux) "/mnt/c/dev/Temp/" "c:/dev/Temp") t))
+   org-agenda-skip-deadline-prewarning-if-scheduled t
+   org-agenda-skip-scheduled-if-done t
+
+   org-agenda-files (if (eq system-type 'gnu/linux) (quote ("/mnt/c/dev/Projects/Logs/todo.org")) (quote ("c:/dev/Projects/Logs/todo.org")))
+   org-agenda-restore-windows-after-quit t
+   org-agenda-skip-deadline-prewarning-if-scheduled t
+   org-agenda-window-setup (quote current-window)
+
+   org-agenda-custom-commands
+   '(("a" "Weekly agenda"
+      ((agenda "" ((org-agenda-ndays 7)))
+       (tags-todo "EFFORT={.+}+(THISWEEK|URGENT)"
+                  ((org-agenda-sorting-strategy '(effort-up))))
+       (tags-todo "EFFORT<>{.+}+THISWEEK"))))))
+
 
 (defun keith/custom-agenda (&optional arg)
   (interactive "P")
@@ -378,7 +398,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (sublimity web-beautify utop tuareg caml ocp-indent merlin livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern dash-functional tern company-coq company-math math-symbol-lists coffee-mode ws-butler window-numbering which-key web-mode wanderlust volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org tagedit spacemacs-theme spaceline smeargle slim-mode scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe restart-emacs rbenv rake rainbow-delimiters racket-mode racer quelpa pug-mode powershell popwin persp-mode paradox orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file neotree move-text minitest magit-gitflow macrostep lorem-ipsum linum-relative link-hint less-css-mode info+ indent-guide ido-vertical-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link flyspell-correct-helm flycheck-rust flycheck-pos-tip flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump dtrt-indent define-word company-web company-statistics company-auctex column-enforce-mode clean-aindent-mode chruby cargo bundler bbdb auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
+    (mu4e-maildirs-extension mu4e-alert ht sublimity web-beautify utop tuareg caml ocp-indent merlin livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern dash-functional tern company-coq company-math math-symbol-lists coffee-mode ws-butler window-numbering which-key web-mode wanderlust volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org tagedit spacemacs-theme spaceline smeargle slim-mode scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe restart-emacs rbenv rake rainbow-delimiters racket-mode racer quelpa pug-mode powershell popwin persp-mode paradox orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file neotree move-text minitest magit-gitflow macrostep lorem-ipsum linum-relative link-hint less-css-mode info+ indent-guide ido-vertical-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link flyspell-correct-helm flycheck-rust flycheck-pos-tip flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump dtrt-indent define-word company-web company-statistics company-auctex column-enforce-mode clean-aindent-mode chruby cargo bundler bbdb auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
