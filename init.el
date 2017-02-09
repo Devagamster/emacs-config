@@ -311,8 +311,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
    ;; (quote
    ;;  (("^\\.Simmons" . ".Simmons/[Gmail].Trash")
    ;;   ("^\\.School" . ".School/[Gmail].Trash")))
-   (setq
-    mu4e-maildir "~/Mail")))
+    mu4e-maildir "~/Mail"))
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
@@ -364,8 +363,6 @@ you should place your code here."
       (mu4e-trash-folder "/[Gmail].Trash")
       (user-mail-address "keithsim@uw.edu")
       (user-full-name "Keith Simmons")))
-
-   mu4e-contexts
 
    backup-directory-alist
    `((".*" . ,(if (eq system-type 'gnu/linux) "/mnt/c/dev/Temp/" "c:/dev/Temp")))
