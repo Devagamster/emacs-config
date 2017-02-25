@@ -13,7 +13,9 @@
     (evilified-state-evilify-map gdb-frames-mode-map
       :mode gdb-frames-mode)
     (evilified-state-evilify-map gdb-disassembly-mode-map
-      :mode gdb-disassembly-mode)))
+      :mode gdb-disassembly-mode)
+    (evilified-state-evilify-map gdb-memory-mode-map
+      :mode gdb-memory-mode)))
 
 (defun personal/post-init-mu4e ()
   (with-eval-after-load "mu4e"

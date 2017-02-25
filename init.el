@@ -11,7 +11,7 @@
      javascript
      ,(if (eq system-type 'gnu/linux) 'ocaml)
      ,(if (eq system-type 'gnu/linux) 'coq)
-     rust
+     ;; rust
      bbdb
      wanderlust
      ruby
@@ -137,9 +137,16 @@
    mu4e-compose-context-policy nil
 
    backup-directory-alist
-   `((".*" . ,(if (eq system-type 'gnu/linux) "/mnt/c/dev/Temp/" "c:/dev/Temp")))
+   `(("." . ,(if (eq system-type 'gnu/linux) "/mnt/c/dev/Temp/" "c:/dev/Temp")))
    auto-save-file-name-transforms
-   `((".*" ,(if (eq system-type 'gnu/linux) "/mnt/c/dev/Temp/" "c:/dev/Temp") t))
+   `(("." ,(if (eq system-type 'gnu/linux) "/mnt/c/dev/Temp/" "c:/dev/Temp") t))
+
+   backup-by-copying t
+   delete-old-versions t
+   kept-new-versions 6
+   kept-old-versions 2
+   version-control t
+   temporary-file-directory (if (eq system-type 'gnu/linux) "/mnt/c/dev/Temp/" "c:/dev/Temp")
 
    org-agenda-skip-deadline-prewarning-if-scheduled t
    org-agenda-skip-scheduled-if-done t
