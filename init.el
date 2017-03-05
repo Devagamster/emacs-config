@@ -6,14 +6,15 @@
    dotspacemacs-configuration-layer-path '()
 
    dotspacemacs-configuration-layers
-   `(c-c++
+   `(typescript
+     c-c++
      markdown
      javascript
      ,(if (eq system-type 'gnu/linux) 'ocaml)
      ,(if (eq system-type 'gnu/linux) 'coq)
      ;; rust
      bbdb
-     wanderlust
+     ;; wanderlust
      ruby
      html
      windows-scripts
@@ -26,7 +27,7 @@
      (mu4e :variables
            mu4e-installation-path "~/mu4e/")
      latex
-     spell-checking
+     (spell-checking :variables spell-checking-enable-by-default nil)
      syntax-checking
      frame-move
      personal)
@@ -136,17 +137,10 @@
    mu4e-context-policy 'pick-first
    mu4e-compose-context-policy nil
 
-   backup-directory-alist
-   `(("." . ,(if (eq system-type 'gnu/linux) "/mnt/c/dev/Temp/" "c:/dev/Temp")))
-   auto-save-file-name-transforms
-   `(("." ,(if (eq system-type 'gnu/linux) "/mnt/c/dev/Temp/" "c:/dev/Temp") t))
+   auto-save-default nil
+   backup-inhibited t
 
-   backup-by-copying t
-   delete-old-versions t
-   kept-new-versions 6
-   kept-old-versions 2
-   version-control t
-   temporary-file-directory (if (eq system-type 'gnu/linux) "/mnt/c/dev/Temp/" "c:/dev/Temp")
+   ispell-program-name "aspell"
 
    org-agenda-skip-deadline-prewarning-if-scheduled t
    org-agenda-skip-scheduled-if-done t
@@ -176,7 +170,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (mmm-mode markdown-toc markdown-mode gh-md disaster company-c-headers cmake-mode clang-format ws-butler window-numbering which-key web-mode web-beautify wanderlust volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org tagedit spacemacs-theme spaceline smeargle slim-mode scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe restart-emacs rbenv rake rainbow-delimiters racket-mode racer quelpa pug-mode powershell popwin persp-mode paradox orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file neotree mu4e-maildirs-extension mu4e-alert move-text minitest magit-gitflow macrostep lorem-ipsum livid-mode linum-relative link-hint less-css-mode json-mode js2-refactor js-doc info+ indent-guide ido-vertical-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link flyspell-correct-helm flycheck-rust flycheck-pos-tip flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump dtrt-indent define-word company-web company-tern company-statistics company-auctex column-enforce-mode coffee-mode clean-aindent-mode chruby cargo bundler bracketed-paste bbdb auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
+    (tide typescript-mode mmm-mode markdown-toc markdown-mode gh-md disaster company-c-headers cmake-mode clang-format ws-butler window-numbering which-key web-mode web-beautify wanderlust volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org tagedit spacemacs-theme spaceline smeargle slim-mode scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe restart-emacs rbenv rake rainbow-delimiters racket-mode racer quelpa pug-mode powershell popwin persp-mode paradox orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file neotree mu4e-maildirs-extension mu4e-alert move-text minitest magit-gitflow macrostep lorem-ipsum livid-mode linum-relative link-hint less-css-mode json-mode js2-refactor js-doc info+ indent-guide ido-vertical-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link flyspell-correct-helm flycheck-rust flycheck-pos-tip flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump dtrt-indent define-word company-web company-tern company-statistics company-auctex column-enforce-mode coffee-mode clean-aindent-mode chruby cargo bundler bracketed-paste bbdb auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
