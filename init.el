@@ -146,6 +146,9 @@
    auto-save-file-name-transforms `((".*" "c:/dev/Temp/" t))
    create-lockfiles nil
 
+   js-indent-level 2
+   typescript-indent-level 2
+
    ispell-program-name "aspell"
 
    org-agenda-skip-deadline-prewarning-if-scheduled t
