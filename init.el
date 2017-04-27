@@ -7,6 +7,7 @@
 
    dotspacemacs-configuration-layers
    `(
+     yaml
      autohotkey
      typescript
      c-c++
@@ -16,7 +17,6 @@
      ,(if (eq system-type 'gnu/linux) 'coq)
      ;; rust
      bbdb
-     ;; wanderlust
      ruby
      html
      windows-scripts
@@ -26,8 +26,6 @@
      emacs-lisp
      git
      org
-     (mu4e :variables
-           mu4e-installation-path "~/mu4e/")
      latex
      (spell-checking :variables spell-checking-enable-by-default nil)
      syntax-checking
@@ -73,7 +71,7 @@
    dotspacemacs-display-default-layout nil
    dotspacemacs-auto-resume-layouts nil
    dotspacemacs-large-file-size 1
-   dotspacemacs-auto-save-file-location 'cache
+   ;; dotspacemacs-auto-save-file-location 'cache
    dotspacemacs-max-rollback-slots 5
    dotspacemacs-helm-resize nil
    dotspacemacs-helm-no-header nil
@@ -143,13 +141,10 @@
    mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil))
    mouse-wheel-progressive-speed nil
 
-   mu4e-maildir "~/Mail"
-
-   mu4e-context-policy 'pick-first
-   mu4e-compose-context-policy nil
-
-   auto-save-default nil
-   backup-inhibited t
+   backup-directory-alist `(("." . "c:/dev/Temp/"))
+   auto-save-list-file-prefix "c:/dev/Temp/.auto-saves-"
+   auto-save-file-name-transforms `((".*" "c:/dev/Temp/" t))
+   create-lockfiles nil
 
    ispell-program-name "aspell"
 
