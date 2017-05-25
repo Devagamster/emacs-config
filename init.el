@@ -6,7 +6,8 @@
    dotspacemacs-configuration-layer-path '()
 
    dotspacemacs-configuration-layers
-   `(
+   `(geolocation
+     shaders
      yaml
      autohotkey
      typescript
@@ -15,8 +16,8 @@
      javascript
      ,(if (eq system-type 'gnu/linux) 'ocaml)
      ,(if (eq system-type 'gnu/linux) 'coq)
-     ;; rust
-     bbdb
+     rust
+     ;; bbdb
      ruby
      html
      windows-scripts
@@ -48,11 +49,11 @@
    dotspacemacs-startup-lists '((recents . 10))
    dotspacemacs-startup-buffer-responsive t
    dotspacemacs-scratch-mode 'text-mode
-   dotspacemacs-themes '(spacemacs-dark)
+   dotspacemacs-themes '(solarized-light solarized-dark)
    dotspacemacs-colorize-cursor-according-to-state t
    dotspacemacs-default-font `("Source Code Pro"
-                               :size ,(if (file-exists-p "~/.highdpi") 25 12)
-                               :weight normal
+                               :size ,(if (file-exists-p "~/.highdpi") 25 13)
+                               :weight bold
                                :width normal
                                :powerline-scale 1.1)
    dotspacemacs-leader-key "SPC"
@@ -101,7 +102,10 @@
    dotspacemacs-whitespace-cleanup nil))
 
 (defun dotspacemacs/user-init ()
-  (setq custom-file "~/.spacemacs.d/custom.el"))
+  (setq custom-file "~/.spacemacs.d/custom.el"
+        calendar-location-name "Seattle, WA"
+        calendar-latitude 47.667998
+        calendar-longitude -122.321062))
 
 (defun dotspacemacs/user-config ()
   (server-start)
