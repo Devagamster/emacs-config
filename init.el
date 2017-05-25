@@ -6,8 +6,7 @@
    dotspacemacs-configuration-layer-path '()
 
    dotspacemacs-configuration-layers
-   `(geolocation
-     shaders
+   `(shaders
      yaml
      autohotkey
      typescript
@@ -53,7 +52,7 @@
    dotspacemacs-colorize-cursor-according-to-state t
    dotspacemacs-default-font `("Source Code Pro"
                                :size ,(if (file-exists-p "~/.highdpi") 25 13)
-                               :weight bold
+                               :weight normal
                                :width normal
                                :powerline-scale 1.1)
    dotspacemacs-leader-key "SPC"

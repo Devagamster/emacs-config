@@ -1,5 +1,5 @@
 (defconst personal-packages
-  '(gdb-mi))
+  '(gdb-mi theme-changer))
 
 (defun personal/post-init-gdb-mi ()
   (with-eval-after-load "gdb-mi"
@@ -17,3 +17,11 @@
     (evilified-state-evilify-map gdb-memory-mode-map
       :mode gdb-memory-mode)))
 
+(defun geolocation/init-theme-changer ()
+  "Initialize theme-changer"
+  (use-package theme-changer
+    :config
+    (progn
+      (when (> (length dotspacemacs-themes) 1)
+        (change-theme (nth 0 dotspacemacs-themes)
+                      (nth 1 dotspacemacs-themes))))))
