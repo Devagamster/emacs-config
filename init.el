@@ -30,7 +30,8 @@
      (spell-checking :variables spell-checking-enable-by-default nil)
      syntax-checking
      frame-move
-     personal)
+     personal
+     (evil-snipe :variables evil-snipe-enable-alternate-f-and-t-behaviors t))
    dotspacemacs-additional-packages '(dtrt-indent)
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages '()
@@ -50,10 +51,10 @@
    dotspacemacs-scratch-mode 'text-mode
    dotspacemacs-themes '(solarized-light solarized-dark)
    dotspacemacs-colorize-cursor-according-to-state t
-   dotspacemacs-default-font `("Source Code Pro"
+   dotspacemacs-default-font `("Fira Code"
                                :size ,(if (file-exists-p "~/.highdpi") 25 13)
-                               :weight normal
-                               :width normal
+                               :weight medium
+                               :width medium
                                :powerline-scale 1.1)
    dotspacemacs-leader-key "SPC"
    dotspacemacs-emacs-command-key "SPC"
@@ -63,7 +64,7 @@
    dotspacemacs-major-mode-leader-key ","
    dotspacemacs-major-mode-emacs-leader-key "C-M-m"
    dotspacemacs-distinguish-gui-tab nil
-   dotspacemacs-remap-Y-to-y$ nil
+   dotspacemacs-remap-Y-to-y$ t
    dotspacemacs-retain-visual-state-on-shift t
    dotspacemacs-visual-line-move-text t
    dotspacemacs-ex-substitute-global nil
@@ -71,7 +72,6 @@
    dotspacemacs-display-default-layout nil
    dotspacemacs-auto-resume-layouts nil
    dotspacemacs-large-file-size 1
-   ;; dotspacemacs-auto-save-file-location 'cache
    dotspacemacs-max-rollback-slots 5
    dotspacemacs-helm-resize nil
    dotspacemacs-helm-no-header nil
@@ -107,6 +107,7 @@
         calendar-longitude -122.321062))
 
 (defun dotspacemacs/user-config ()
+  (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")
   (server-start)
   (evil-leader/set-key
     "xi" 'dtrt-indent-adapt
@@ -140,6 +141,7 @@
 
   (setq
    default-truncate-lines t
+   typescript-auto-indent-flag nil
 
    mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil))
    mouse-wheel-progressive-speed nil
