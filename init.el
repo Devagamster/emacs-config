@@ -16,6 +16,7 @@
      ess
      ,(if (eq system-type 'gnu/linux) 'ocaml)
      ,(if (eq system-type 'gnu/linux) 'coq)
+     ess
      rust
      ;; bbdb
      ruby
