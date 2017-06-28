@@ -13,6 +13,7 @@
      c-c++
      markdown
      javascript
+     ess
      ,(if (eq system-type 'gnu/linux) 'ocaml)
      ,(if (eq system-type 'gnu/linux) 'coq)
      rust
@@ -51,10 +52,10 @@
    dotspacemacs-scratch-mode 'text-mode
    dotspacemacs-themes '(solarized-light solarized-dark)
    dotspacemacs-colorize-cursor-according-to-state t
-   dotspacemacs-default-font `("Fira Code"
+   dotspacemacs-default-font `("Source Code Pro"
                                :size ,(if (file-exists-p "~/.highdpi") 25 13)
-                               :weight medium
-                               :width medium
+                               :weight normal
+                               :width normal
                                :powerline-scale 1.1)
    dotspacemacs-leader-key "SPC"
    dotspacemacs-emacs-command-key "SPC"
@@ -151,6 +152,9 @@
    auto-save-file-name-transforms `((".*" "c:/dev/Temp/" t))
    create-lockfiles nil
 
+   web-mode-markup-indent-offset 2
+   web-mode-css-indent-offset 2
+   web-mode-code-indent-offset 2
    js-indent-level 2
    typescript-indent-level 2
 
