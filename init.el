@@ -6,11 +6,13 @@
    dotspacemacs-configuration-layer-path '()
 
    dotspacemacs-configuration-layers
-   `(shaders
+   `(csv
+     shaders
      yaml
      autohotkey
      typescript
      c-c++
+     csharp
      markdown
      javascript
      ess
@@ -18,7 +20,6 @@
      ,(if (eq system-type 'gnu/linux) 'coq)
      ess
      rust
-     ;; bbdb
      ruby
      html
      windows-scripts
