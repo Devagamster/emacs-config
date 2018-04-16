@@ -6,19 +6,21 @@
    dotspacemacs-configuration-layer-path '()
 
    dotspacemacs-configuration-layers
-   `(csv
+   `(
+     csharp
+     vimscript
+     csv
      shaders
      yaml
      autohotkey
      typescript
      c-c++
-     csharp
+     ;; csharp
      markdown
      javascript
-     ess
+     ;; ess
      ,(if (eq system-type 'gnu/linux) 'ocaml)
      ,(if (eq system-type 'gnu/linux) 'coq)
-     ess
      rust
      ruby
      html
@@ -28,14 +30,15 @@
      auto-completion
      emacs-lisp
      git
+     version-control
      org
      latex
      (spell-checking :variables spell-checking-enable-by-default nil)
      syntax-checking
      frame-move
-     personal
+     ;;personal
      (evil-snipe :variables evil-snipe-enable-alternate-f-and-t-behaviors t))
-   dotspacemacs-additional-packages '(dtrt-indent)
+   dotspacemacs-additional-packages '(dtrt-indent clipmon)
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages '()
    dotspacemacs-install-packages 'used-only))
@@ -54,9 +57,9 @@
    dotspacemacs-scratch-mode 'text-mode
    dotspacemacs-themes '(solarized-light solarized-dark)
    dotspacemacs-colorize-cursor-according-to-state t
-   dotspacemacs-default-font `("Source Code Pro"
+   dotspacemacs-default-font `("Fira Code"
                                :size ,(if (file-exists-p "~/.highdpi") 25 13)
-                               :weight normal
+                               :weight light
                                :width normal
                                :powerline-scale 1.1)
    dotspacemacs-leader-key "SPC"
@@ -113,19 +116,6 @@
   (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")
   (server-start)
   (evil-leader/set-key
-    "xi" 'dtrt-indent-adapt
-    "SPC" 'helm-M-x)
-  (defhydra hydra-scrolling ()
-    "scrolling"
-    ("j" (evil-scroll-down 10) "scroll 10 down")
-    ("k" (evil-scroll-up 10) "scroll 10 up")
-    ("K" (evil-scroll-down 50) "scroll 50 up")
-    ("J" (evil-scroll-up 50) "scroll 50 down")
-    ("l" (evil-scroll-page-down 1) "scroll page down")
-    ("h" (evil-scroll-page-up 1) "scroll page up")
-    ("L" (evil-scroll-page-down 2) "scroll 2 pages down")
-    ("H" (evil-scroll-page-up 2) "scroll 2 pages up"))
-  (evil-leader/set-key
     "oa" 'keith/custom-agenda
     "wl" 'keith/window-right
     "wk" 'keith/window-up
@@ -140,13 +130,24 @@
     "kw" 'delete-window
     "fm" 'spacemacs/toggle-maximize-on
     "s SPC" 'hydra-scrolling/body)
+
   (define-key evil-normal-state-map (kbd "<escape>") 'spacemacs/evil-search-clear-highlight)
+  (defhydra hydra-scrolling ()
+    "scrolling"
+    ("j" (evil-scroll-down 10) "scroll 10 down")
+    ("k" (evil-scroll-up 10) "scroll 10 up")
+    ("K" (evil-scroll-down 50) "scroll 50 up")
+    ("J" (evil-scroll-up 50) "scroll 50 down")
+    ("l" (evil-scroll-page-down 1) "scroll page down")
+    ("h" (evil-scroll-page-up 1) "scroll page up")
+    ("L" (evil-scroll-page-down 2) "scroll 2 pages down")
+    ("H" (evil-scroll-page-up 2) "scroll 2 pages up"))
 
   (setq
    default-truncate-lines t
    typescript-auto-indent-flag nil
 
-   mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil))
+   mouse-wheel-scroll-amount '(1 ((shift) . 5) ((control) . nil))
    mouse-wheel-progressive-speed nil
 
    backup-directory-alist `(("." . "c:/dev/Temp/"))
@@ -159,23 +160,13 @@
    web-mode-code-indent-offset 2
    js-indent-level 2
    typescript-indent-level 2
+   powershell-indent 2
 
    ispell-program-name "aspell"
 
-   org-agenda-skip-deadline-prewarning-if-scheduled t
-   org-agenda-skip-scheduled-if-done t
+   helm-ag-base-command "pt -e --nocolor --nogroup"
 
-   org-agenda-files (if (eq system-type 'gnu/linux) (quote ("/mnt/c/dev/Projects/Logs/todo.org")) (quote ("c:/dev/Projects/Logs/todo.org")))
-   org-agenda-restore-windows-after-quit t
-   org-agenda-skip-deadline-prewarning-if-scheduled t
-   org-agenda-window-setup (quote current-window)
-
-   org-agenda-custom-commands
-   '(("a" "Weekly agenda"
-      ((agenda "" ((org-agenda-ndays 7)))
-       (tags-todo "EFFORT={.+}+(THISWEEK|URGENT)"
-                  ((org-agenda-sorting-strategy '(effort-up))))
-       (tags-todo "EFFORT<>{.+}+THISWEEK")))))
+   omnisharp-server-executable-path "C:\\dev\\Tools\\omnisharp\\OmniSharp.exe")
 
   (with-eval-after-load "golden-ratio"
     (setq golden-ratio-extra-commands
@@ -187,13 +178,7 @@
                     keith/window-right
                     keith/window-up
                     keith/window-down
-                    keith/window-left))))
-
-  (if (eq system-type 'gnu/linux) (setq exec-path-from-shell-check-startup-files nil)))
-
-(defun keith/custom-agenda (&optional arg)
-  (interactive "P")
-  (org-agenda arg "a"))
+                    keith/window-left)))))
 
 (defun keith/split-window-right ()
   (interactive)
@@ -233,6 +218,10 @@
   (interactive)
   (evil-escape)
   (spacemacs/evil-search-clear-highlight))
+
+(defun keith/delete-frame ()
+  "Delete the selected frame. If the last one, kill-terminal"
+  (delete-frame force))
 
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
