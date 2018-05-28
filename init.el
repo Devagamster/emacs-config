@@ -11,6 +11,7 @@
      vimscript
      csv
      shaders
+     clojure
      yaml
      autohotkey
      typescript
@@ -18,9 +19,6 @@
      ;; csharp
      markdown
      javascript
-     ;; ess
-     ,(if (eq system-type 'gnu/linux) 'ocaml)
-     ,(if (eq system-type 'gnu/linux) 'coq)
      rust
      ruby
      html
@@ -55,7 +53,7 @@
    dotspacemacs-startup-lists '((recents . 10))
    dotspacemacs-startup-buffer-responsive t
    dotspacemacs-scratch-mode 'text-mode
-   dotspacemacs-themes '(solarized-light solarized-dark)
+   dotspacemacs-themes '(solarized-dark)
    dotspacemacs-colorize-cursor-according-to-state t
    dotspacemacs-default-font `("Fira Code"
                                :size ,(if (file-exists-p "~/.highdpi") 25 13)
@@ -95,6 +93,7 @@
    dotspacemacs-show-transient-state-title t
    dotspacemacs-show-transient-state-color-guide t
    dotspacemacs-mode-line-unicode-symbols t
+   dotspacemacs-mode-line-theme 'spacemacs
    dotspacemacs-smooth-scrolling t
    dotspacemacs-line-numbers nil
    dotspacemacs-folding-method 'evil
@@ -104,17 +103,17 @@
    dotspacemacs-persistent-server t
    dotspacemacs-search-tools '("pt")
    dotspacemacs-default-package-repository nil
-   dotspacemacs-whitespace-cleanup nil))
+   dotspacemacs-whitespace-cleanup nil
+   dotspacemacs-enable-emacs-pdumper t
+   dotspacemacs-emacs-pdumper-executable-file "c:/dev/Tools/emacs/bin/emacs.exe"
+   dotspacemacs-emacs-dumper-dump-file "spacemacs.pdmp"))
 
-(defun dotspacemacs/user-init ()
+(defun dotspacemacs/user-load ()
   (setq custom-file "~/.spacemacs.d/custom.el"
         calendar-location-name "Seattle, WA"
         calendar-latitude 47.667998
-        calendar-longitude -122.321062))
-
-(defun dotspacemacs/user-config ()
+        calendar-longitude -122.321062)
   (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")
-  (server-start)
   (evil-leader/set-key
     "oa" 'keith/custom-agenda
     "wl" 'keith/window-right
@@ -144,6 +143,8 @@
     ("H" (evil-scroll-page-up 2) "scroll 2 pages up"))
 
   (setq
+   powershell-prompt-regex "(?>(?>\\S| )*\\n)+([A-Z]:\\\\(?>(?>\\w| )+\\\\)*(?>\\w| )+(?> \\[(?>\\S| )*\\])?)> "
+
    default-truncate-lines t
    typescript-auto-indent-flag nil
 
@@ -165,7 +166,6 @@
    ispell-program-name "aspell"
 
    helm-ag-base-command "pt -e --nocolor --nogroup"
-
    omnisharp-server-executable-path "C:\\dev\\Tools\\omnisharp\\OmniSharp.exe")
 
   (with-eval-after-load "golden-ratio"
@@ -179,6 +179,23 @@
                     keith/window-up
                     keith/window-down
                     keith/window-left)))))
+  (add-hook 'doc-view-mode-hook 'auto-revert-mode)
+  (add-hook 'rust-mode-hook 'keith/disable-racer-eldoc)
+  (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+
+  (if (eq system-type 'gnu/linux) (setq exec-path-from-shell-check-startup-files nil)))
+
+(org-mode)
+(emacs-lisp-mode)
+
+(defun dotspacemacs/user-init ())
+
+(defun keith/disable-racer-eldoc ()
+  (setq eldoc-documentation-function nil))
+
+(defun dotspacemacs/user-config ()
+  (server-start))
+>>>>>>> removed unused layers
 
 (defun keith/split-window-right ()
   (interactive)
