@@ -10,13 +10,13 @@
      csharp
      vimscript
      csv
-     shaders
      clojure
      yaml
      autohotkey
      typescript
      c-c++
-     ;; csharp
+     csharp
+     pdf
      markdown
      javascript
      rust
@@ -43,8 +43,15 @@
 
 (defun dotspacemacs/init ()
   (setq-default
+   dotspacemacs-enable-emacs-pdumper t
+   dotspacemacs-emacs-pdumper-executable-file "c:/dev/Tools/emacs/bin/emacs.exe"
+   dotspacemacs-emacs-dumper-dump-file "spacemacs.pdmp"
    dotspacemacs-elpa-https t
    dotspacemacs-elpa-timeout 5
+   dotspacemacs-use-spacelpa nil
+   dotspacemacs-gc-cons '(100000000 0.1)
+   dotspacemacs-use-spacelpa nil
+   dotspacemacs-verify-spacelpa-archives nil
    dotspacemacs-check-for-update nil
    dotspacemacs-elpa-subdirectory nil
    dotspacemacs-editing-style 'vim
@@ -53,13 +60,15 @@
    dotspacemacs-startup-lists '((recents . 10))
    dotspacemacs-startup-buffer-responsive t
    dotspacemacs-scratch-mode 'text-mode
-   dotspacemacs-themes '(solarized-dark)
+   dotspacemacs-initial-scratch-message nil
+   dotspacemacs-themes '(spacemacs-dark)
+   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.5)
    dotspacemacs-colorize-cursor-according-to-state t
    dotspacemacs-default-font `("Fira Code"
                                :size ,(if (file-exists-p "~/.highdpi") 25 13)
                                :weight light
                                :width normal
-                               :powerline-scale 1.1)
+                               :powerline-scale 1.5)
    dotspacemacs-leader-key "SPC"
    dotspacemacs-emacs-command-key "SPC"
    dotspacemacs-command-key "SPC"
@@ -74,8 +83,10 @@
    dotspacemacs-ex-substitute-global nil
    dotspacemacs-default-layout-name "Default"
    dotspacemacs-display-default-layout nil
-   dotspacemacs-auto-resume-layouts nil
+   dotspacemacs-auto-resume-lay
+   dotspacemacs-auto-generate-layout-names nilouts nil
    dotspacemacs-large-file-size 1
+   dotspacemacs-auto-save-file-location 'cache
    dotspacemacs-max-rollback-slots 5
    dotspacemacs-helm-resize nil
    dotspacemacs-helm-no-header nil
@@ -84,7 +95,8 @@
    dotspacemacs-enable-paste-transient-state nil
    dotspacemacs-which-key-delay 0.4
    dotspacemacs-which-key-position 'bottom
-   dotspacemacs-loading-progress-bar nil
+   dotspacemacs-switch-to-buffer-prefers-purpose nil
+   dotspacemacs-loading-progress-bar t
    dotspacemacs-fullscreen-at-startup nil
    dotspacemacs-fullscreen-use-non-native nil
    dotspacemacs-maximized-at-startup nil
@@ -92,57 +104,26 @@
    dotspacemacs-inactive-transparency 90
    dotspacemacs-show-transient-state-title t
    dotspacemacs-show-transient-state-color-guide t
-   dotspacemacs-mode-line-unicode-symbols t
-   dotspacemacs-mode-line-theme 'spacemacs
    dotspacemacs-smooth-scrolling t
    dotspacemacs-line-numbers nil
    dotspacemacs-folding-method 'evil
    dotspacemacs-smartparens-strict-mode nil
    dotspacemacs-smart-closing-parenthesis nil
    dotspacemacs-highlight-delimiters 'all
+   dotspacemacs-enable-server t
    dotspacemacs-persistent-server t
-   dotspacemacs-search-tools '("pt")
-   dotspacemacs-default-package-repository nil
+   dotspacemacs-search-tools '("rg")
+   dotspacemacs-frame-title-format "%b"
+   dotspacemacs-icon-title-format nil
+   dotspacemacs-zone-out-when-idle t
    dotspacemacs-whitespace-cleanup nil
-   dotspacemacs-enable-emacs-pdumper t
-   dotspacemacs-emacs-pdumper-executable-file "c:/dev/Tools/emacs/bin/emacs.exe"
-   dotspacemacs-emacs-dumper-dump-file "spacemacs.pdmp"))
+   dotspacemacs-pretty-docs nil))
 
 (defun dotspacemacs/user-load ()
-  (setq custom-file "~/.spacemacs.d/custom.el"
-        calendar-location-name "Seattle, WA"
-        calendar-latitude 47.667998
-        calendar-longitude -122.321062)
-  (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")
-  (evil-leader/set-key
-    "oa" 'keith/custom-agenda
-    "wl" 'keith/window-right
-    "wk" 'keith/window-up
-    "wj" 'keith/window-down
-    "wh" 'keith/window-left
-    "wo" 'keith/split-window-right
-    "wi" 'keith/split-window-up
-    "wu" 'keith/split-window-down
-    "wy" 'keith/split-window-left
-    "fn" 'new-frame
-    "kf" 'delete-frame
-    "kw" 'delete-window
-    "fm" 'spacemacs/toggle-maximize-on
-    "s SPC" 'hydra-scrolling/body)
-
-  (define-key evil-normal-state-map (kbd "<escape>") 'spacemacs/evil-search-clear-highlight)
-  (defhydra hydra-scrolling ()
-    "scrolling"
-    ("j" (evil-scroll-down 10) "scroll 10 down")
-    ("k" (evil-scroll-up 10) "scroll 10 up")
-    ("K" (evil-scroll-down 50) "scroll 50 up")
-    ("J" (evil-scroll-up 50) "scroll 50 down")
-    ("l" (evil-scroll-page-down 1) "scroll page down")
-    ("h" (evil-scroll-page-up 1) "scroll page up")
-    ("L" (evil-scroll-page-down 2) "scroll 2 pages down")
-    ("H" (evil-scroll-page-up 2) "scroll 2 pages up"))
-
   (setq
+   calendar-location-name "Seattle, WA"
+   calendar-latitude 47.667998
+   calendar-longitude -122.321062
    powershell-prompt-regex "(?>(?>\\S| )*\\n)+([A-Z]:\\\\(?>(?>\\w| )+\\\\)*(?>\\w| )+(?> \\[(?>\\S| )*\\])?)> "
 
    default-truncate-lines t
@@ -166,7 +147,42 @@
    ispell-program-name "aspell"
 
    helm-ag-base-command "pt -e --nocolor --nogroup"
-   omnisharp-server-executable-path "C:\\dev\\Tools\\omnisharp\\OmniSharp.exe")
+   omnisharp-server-executable-path "C:\\dev\\Tools\\omnisharp\\OmniSharp.exe"
+
+   flycheck-check-syntax-automatically '())
+  (load "evil-surround.el")
+  (load "helm.el")
+
+  (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")
+
+  (define-key evil-normal-state-map (kbd "<escape>") 'spacemacs/evil-search-clear-highlight)
+  (defhydra hydra-scrolling ()
+    "scrolling"
+    ("j" (evil-scroll-down 10) "scroll 10 down")
+    ("k" (evil-scroll-up 10) "scroll 10 up")
+    ("J" (evil-scroll-down 50) "scroll 50 down")
+    ("K" (evil-scroll-up 50) "scroll 50 up")
+    ("l" (evil-scroll-page-down 1) "scroll page down")
+    ("h" (evil-scroll-page-up 1) "scroll page up")
+    ("L" (evil-scroll-page-down 2) "scroll 2 pages down")
+    ("H" (evil-scroll-page-up 2) "scroll 2 pages up"))
+
+  (evil-leader/set-key
+    "oa" 'keith/custom-agenda
+    "wl" 'keith/window-right
+    "wk" 'keith/window-up
+    "wj" 'keith/window-down
+    "wh" 'keith/window-left
+    "wo" 'keith/split-window-right
+    "wi" 'keith/split-window-up
+    "wu" 'keith/split-window-down
+    "wy" 'keith/split-window-left
+    "fn" 'new-frame
+    "df" 'keith/delete-frame
+    "db" 'evil-delete-buffer
+    "dw" 'delete-window
+    "fm" 'spacemacs/toggle-maximize-on
+    "s SPC" 'hydra-scrolling/body)
 
   (with-eval-after-load "golden-ratio"
     (setq golden-ratio-extra-commands
@@ -178,24 +194,19 @@
                     keith/window-right
                     keith/window-up
                     keith/window-down
-                    keith/window-left)))))
+                    keith/window-left))))
+
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
   (add-hook 'rust-mode-hook 'keith/disable-racer-eldoc)
-  (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
-  (if (eq system-type 'gnu/linux) (setq exec-path-from-shell-check-startup-files nil)))
-
-(org-mode)
-(emacs-lisp-mode)
-
-(defun dotspacemacs/user-init ())
+  (if (eq system-type 'gnu/linux) (setq exec-path-from-shell-check-startup-files nil))
+  (autoload-do-load 'org-mode)
+  (autoload-do-load 'emacs-lisp-mode)
+  (require 'yasnippet)
+  (yas/reload-all t))
 
 (defun keith/disable-racer-eldoc ()
   (setq eldoc-documentation-function nil))
-
-(defun dotspacemacs/user-config ()
-  (server-start))
->>>>>>> removed unused layers
 
 (defun keith/split-window-right ()
   (interactive)
@@ -231,14 +242,10 @@
   (evil-beginning-of-line)
   (evil-window-down 1))
 
-(defun keith/escape ()
-  (interactive)
-  (evil-escape)
-  (spacemacs/evil-search-clear-highlight))
-
 (defun keith/delete-frame ()
+  (interactive)
   "Delete the selected frame. If the last one, kill-terminal"
-  (delete-frame force))
+  (condition-case nil (delete-frame) (error (save-buffers-kill-terminal))))
 
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
@@ -250,13 +257,8 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(evil-want-Y-yank-to-eol nil)
- '(golden-ratio-extra-commands
-   (quote
-    (winum-select-window-9 winum-select-window-8 winum-select-window-7 winum-select-window-6 winum-select-window-5 winum-select-window-4 winum-select-window-3 winum-select-window-2 winum-select-window-1 winum-select-window-0-or-10 quit-window evil-window-move-very-bottom evil-window-move-far-right evil-window-move-far-left evil-window-move-very-top evil-window-rotate-downwards evil-window-rotate-upwards evil-window-vnew evil-window-new evil-window-prev evil-window-next evil-window-mru evil-window-top-left evil-window-bottom-right evil-window-down evil-window-up evil-window-right evil-window-left evil-window-vsplit evil-window-split evil-window-delete evil-avy-goto-line evil-avy-goto-word-or-subword-1 buf-move-down buf-move-up buf-move-right buf-move-left avy-pop-mark ace-maximize-window ace-swap-window ace-select-window ace-delete-window ace-window windmove-left windmove-right windmove-down windmove-up keith/split-window-right keith/split-window-up keith/split-window-down keith/split-window-left keith/window-right keith/window-up keith/window-down keith/window-left)))
  '(package-selected-packages
-   (quote
-    (tide typescript-mode mmm-mode markdown-toc markdown-mode gh-md disaster company-c-headers cmake-mode clang-format ws-butler window-numbering which-key web-mode web-beautify wanderlust volatile-highlights vi-tilde-fringe uuidgen use-package toml-mode toc-org tagedit spacemacs-theme spaceline smeargle slim-mode scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe restart-emacs rbenv rake rainbow-delimiters racket-mode racer quelpa pug-mode powershell popwin persp-mode paradox orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file neotree mu4e-maildirs-extension mu4e-alert move-text minitest magit-gitflow macrostep lorem-ipsum livid-mode linum-relative link-hint less-css-mode json-mode js2-refactor js-doc info+ indent-guide ido-vertical-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link flyspell-correct-helm flycheck-rust flycheck-pos-tip flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu emmet-mode elisp-slime-nav dumb-jump dtrt-indent define-word company-web company-tern company-statistics company-auctex column-enforce-mode coffee-mode clean-aindent-mode chruby cargo bundler bracketed-paste bbdb auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile auctex-latexmk aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
+   '(ws-butler winum volatile-highlights vi-tilde-fringe uuidgen toc-org symon string-inflection spaceline-all-the-icons all-the-icons memoize spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode password-generator paradox spinner overseer org-bullets open-junk-file neotree nameless move-text macrostep lorem-ipsum link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-xref helm-themes helm-swoop helm-purpose window-purpose imenu-list helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-cleverparens smartparens paredit evil-args evil-anzu anzu eval-sexp-fu highlight elisp-slime-nav editorconfig dumb-jump f dash s define-word counsel-projectile projectile counsel swiper ivy pkg-info epl column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile packed aggressive-indent ace-window ace-link ace-jump-helm-line helm avy helm-core popup which-key use-package pcre2el org-plus-contrib hydra font-lock+ evil goto-chg undo-tree diminish bind-map bind-key async)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
