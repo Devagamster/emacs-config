@@ -17,10 +17,6 @@
     (evilified-state-evilify-map gdb-memory-mode-map
       :mode gdb-memory-mode)))
 
-(defun personal/post-init-evil-snipe ()
-  (push '(?\[ "[[{(]") evil-snipe-aliases)
-  (push '(?\] "[]})]") evil-snipe-aliases))
-
 (defun personal/init-theme-changer ()
   "Initialize theme-changer"
   (use-package theme-changer
