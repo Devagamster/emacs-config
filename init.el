@@ -150,8 +150,6 @@
    omnisharp-server-executable-path "C:\\dev\\Tools\\omnisharp\\OmniSharp.exe"
 
    flycheck-check-syntax-automatically '())
-  (load "evil-surround.el")
-  (load "helm.el")
 
   (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")
 
@@ -168,7 +166,6 @@
     ("H" (evil-scroll-page-up 2) "scroll 2 pages up"))
 
   (evil-leader/set-key
-    "oa" 'keith/custom-agenda
     "wl" 'keith/window-right
     "wk" 'keith/window-up
     "wj" 'keith/window-down
@@ -181,7 +178,6 @@
     "df" 'keith/delete-frame
     "db" 'evil-delete-buffer
     "dw" 'delete-window
-    "fm" 'spacemacs/toggle-maximize-on
     "s SPC" 'hydra-scrolling/body)
 
   (with-eval-after-load "golden-ratio"
@@ -199,11 +195,15 @@
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
   (add-hook 'rust-mode-hook 'keith/disable-racer-eldoc)
 
-  (if (eq system-type 'gnu/linux) (setq exec-path-from-shell-check-startup-files nil))
-  (autoload-do-load 'org-mode)
-  (autoload-do-load 'emacs-lisp-mode)
-  (require 'yasnippet)
-  (yas/reload-all t))
+  (spacemacs-buffer/goto-buffer)
+  (with-temp-buffer
+    (org-mode))
+  (with-temp-buffer
+    (emacs-lisp-mode)))
+
+(defun dotspacemacs/user-config ()
+  (spacemacs-modeline/init-spaceline)
+  (server-start))
 
 (defun keith/disable-racer-eldoc ()
   (setq eldoc-documentation-function nil))
