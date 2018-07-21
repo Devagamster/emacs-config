@@ -195,11 +195,15 @@
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
   (add-hook 'rust-mode-hook 'keith/disable-racer-eldoc)
 
-  (spacemacs-buffer/goto-buffer)
-  (with-temp-buffer
-    (org-mode))
-  (with-temp-buffer
-    (emacs-lisp-mode)))
+  ;; (with-temp-buffer
+  ;;   (org-mode))
+  ;; (with-temp-buffer
+  ;;   (emacs-lisp-mode))
+  (require 'yasnippet)
+  (when yas-snippet-dirs
+    (yas-reload-all 'no-jit))
+
+  (spacemacs-buffer/goto-buffer))
 
 (defun dotspacemacs/user-config ()
   (spacemacs-modeline/init-spaceline)
