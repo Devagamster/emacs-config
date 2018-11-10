@@ -124,7 +124,6 @@
    calendar-location-name "Seattle, WA"
    calendar-latitude 47.667998
    calendar-longitude -122.321062
-   powershell-prompt-regex "(?>(?>\\S| )*\\n)+([A-Z]:\\\\(?>(?>\\w| )+\\\\)*(?>\\w| )+(?> \\[(?>\\S| )*\\])?)> "
 
    default-truncate-lines t
    typescript-auto-indent-flag nil
@@ -147,7 +146,6 @@
    ispell-program-name "aspell"
 
    helm-ag-base-command "pt -e --nocolor --nogroup"
-   omnisharp-server-executable-path "C:\\dev\\Tools\\omnisharp\\OmniSharp.exe"
 
    flycheck-check-syntax-automatically '())
 
@@ -258,4 +256,17 @@
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(yasnippet-snippets symon string-inflection spaceline-all-the-icons seeing-is-believing ruby-refactor ruby-hash-syntax prettier-js pdf-tools tablist password-generator overseer org-brain nameless magit-svn json-navigator hierarchy impatient-mode helm-xref helm-rtags helm-purpose window-purpose imenu-list helm-git-grep google-c-style gitignore-templates flycheck-rtags evil-org evil-lion evil-goggles evil-cleverparens editorconfig doom-modeline eldoc-eval shrink-path all-the-icons memoize counsel-projectile counsel swiper ivy company-rtags rtags clojure-cheatsheet centered-cursor-mode browse-at-remote font-lock+ dotenv-mode yaml-mode ws-butler winum which-key web-mode web-beautify volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package toml-mode toc-org tide typescript-mode theme-changer tagedit spaceline powerline smeargle slim-mode scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe restart-emacs rbenv rake rainbow-delimiters racket-mode racer pug-mode powershell popwin persp-mode pcre2el paradox orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-plus-contrib org-mime org-download org-bullets open-junk-file omnisharp shut-up neotree move-text mmm-mode minitest markdown-toc magit-gitflow macrostep lorem-ipsum livid-mode skewer-mode simple-httpd linum-relative link-hint json-mode json-snatcher json-reformat js2-refactor js2-mode js-doc indent-guide hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile helm-gitignore request helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haml-mode google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flyspell-correct-helm flyspell-correct flycheck-rust flycheck-pos-tip pos-tip flycheck flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-snipe evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit magit magit-popup git-commit ghub treepy graphql with-editor evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree emmet-mode elisp-slime-nav dumb-jump f disaster diminish diff-hl define-word dactyl-mode csv-mode csharp-mode company-web web-completion-data company-tern s dash-functional tern dash company-statistics company-c-headers company-auctex company column-enforce-mode coffee-mode cmake-mode clojure-snippets clj-refactor hydra inflections edn multiple-cursors paredit peg clipmon clean-aindent-mode clang-format cider-eval-sexp-fu eval-sexp-fu highlight cider sesman spinner queue pkg-info clojure-mode epl chruby cargo markdown-mode rust-mode bundler inf-ruby bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-dictionary auto-compile packed auctex-latexmk auctex ahk-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
 )
