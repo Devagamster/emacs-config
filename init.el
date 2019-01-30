@@ -50,7 +50,6 @@
    dotspacemacs-elpa-timeout 5
    dotspacemacs-use-spacelpa nil
    dotspacemacs-gc-cons '(100000000 0.1)
-   dotspacemacs-use-spacelpa nil
    dotspacemacs-verify-spacelpa-archives nil
    dotspacemacs-check-for-update nil
    dotspacemacs-elpa-subdirectory nil
@@ -120,6 +119,19 @@
    dotspacemacs-pretty-docs nil))
 
 (defun dotspacemacs/user-load ()
+  (spacemacs|when-dumping
+    (dolist (d (directory-files package-user-dir t nil 'nosort))
+      (unless (or (string-equal ".." (substring d -2))
+                  (string-equal "." (substring d -1))
+                  (not (file-directory-p d)))
+        (message "%s" d)
+        (dolist (f (directory-files d t "\\.el$" 'nosort))
+          (unless (string-match-p ".*pkg\\.el$" f)
+            (message "%s" f)
+            (ignore-errors (load f t)))))))
+  (spacemacs|when-dumping
+    (yas-reload-all t))
+
   (setq
    calendar-location-name "Seattle, WA"
    calendar-latitude 47.667998
@@ -202,22 +214,12 @@
                     keith/window-up
                     keith/window-down
                     keith/window-left))))
+
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
   (add-hook 'rust-mode-hook 'keith/disable-racer-eldoc)
-
-  ;; (with-temp-buffer
-  ;;   (org-mode))
-  ;; (with-temp-buffer
-  ;;   (emacs-lisp-mode))
-  (require 'yasnippet)
-  (when yas-snippet-dirs
-    (yas-reload-all 'no-jit))
-
   (spacemacs-buffer/goto-buffer))
 
 (defun dotspacemacs/user-config ()
-  (run-with-idle-timer 1 nil `spacemacs-modeline/init-spaceline)
-  (profiler-start)
   (server-start))
 
 (defun keith/disable-racer-eldoc ()
@@ -276,7 +278,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(yasnippet-snippets winum web-mode vimrc-mode toc-org tide typescript-mode ruby-hash-syntax rspec-mode racket-mode racer powershell pdf-tools paradox orgit org-mime org-download org-brain omnisharp hl-todo highlight-numbers highlight-indentation helm-xref helm-make google-translate git-timemachine git-link flyspell-correct-helm flyspell-correct eyebrowse evil-visual-mark-mode evil-surround evil-nerd-commenter evil-matchit evil-magit evil-goggles editorconfig dumb-jump doom-modeline eldoc-eval diff-hl define-word csharp-mode counsel-projectile counsel swiper ivy cider sesman clojure-mode cargo rust-mode browse-at-remote auto-yasnippet auto-compile ahk-mode aggressive-indent ace-link eval-sexp-fu tern iedit smartparens flycheck company request window-purpose imenu-list rtags helm helm-core yasnippet magit magit-popup git-commit with-editor markdown-mode alert simple-httpd spaceline powerline projectile ace-window avy f which-key use-package async org-plus-contrib evil goto-chg hydra yaml-mode ws-butler writeroom-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen undo-tree treepy treemacs-projectile treemacs-evil toml-mode theme-changer tagedit tablist symon string-inflection spinner spaceline-all-the-icons smeargle slim-mode shut-up shrink-path seeing-is-believing scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-refactor rubocop robe restart-emacs rbenv rake rainbow-delimiters queue pug-mode prettier-js popwin persp-mode password-generator parent-mode packed overseer org-projectile org-present org-pomodoro org-bullets open-junk-file nameless move-text mmm-mode minitest markdown-toc magit-svn magit-gitflow macrostep lorem-ipsum log4e livid-mode link-hint json-navigator json-mode js2-refactor js-doc indent-guide impatient-mode hungry-delete highlight-parentheses helm-themes helm-swoop helm-rtags helm-purpose helm-projectile helm-org-rifle helm-mode-manager helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag graphql google-c-style golden-ratio gnuplot gntp gitignore-templates gitconfig-mode gitattributes-mode git-messenger git-gutter-fringe git-gutter-fringe+ gh-md fuzzy font-lock+ flycheck-rust flycheck-rtags flycheck-pos-tip flx-ido fill-column-indicator fancy-battery expand-region evil-visualstar evil-unimpaired evil-tutor evil-snipe evil-org evil-numbers evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu emmet-mode elisp-slime-nav dotenv-mode disaster diminish dactyl-mode csv-mode company-web company-tern company-statistics company-rtags company-c-headers company-auctex column-enforce-mode clojure-snippets clipmon clean-aindent-mode clang-format cider-eval-sexp-fu chruby centered-cursor-mode bundler bind-key auto-highlight-symbol auto-dictionary auctex-latexmk ace-jump-helm-line ac-ispell)))
+   '(auctex-latexmk yasnippet-snippets yaml-mode ws-butler writeroom-mode winum which-key web-mode web-beautify volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package treemacs-projectile treemacs-evil toml-mode toc-org tide theme-changer tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode seeing-is-believing scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocop rspec-mode robe restart-emacs rbenv rake rainbow-delimiters racket-mode racer pug-mode prettier-js powershell popwin persp-mode pdf-tools password-generator paradox overseer orgit org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file omnisharp nameless move-text mmm-mode minitest markdown-toc magit-svn magit-gitflow macrostep lorem-ipsum livid-mode link-hint json-navigator json-mode js2-refactor js-doc indent-guide impatient-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-rtags helm-purpose helm-projectile helm-org-rifle helm-mode-manager helm-make helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate google-c-style golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-rust flycheck-rtags flycheck-pos-tip flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-snipe evil-org evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu emmet-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-modeline disaster diminish diff-hl define-word dactyl-mode csv-mode counsel-projectile company-web company-tern company-statistics company-rtags company-c-headers company-auctex column-enforce-mode clojure-snippets clipmon clean-aindent-mode clang-format cider-eval-sexp-fu cider chruby centered-cursor-mode cargo bundler browse-at-remote auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile ahk-mode aggressive-indent ace-link ace-jump-helm-line ac-ispell)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
