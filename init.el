@@ -35,6 +35,7 @@
      syntax-checking
      frame-move
      personal
+     evil-mini
      (evil-snipe :variables evil-snipe-enable-alternate-f-and-t-behaviors t))
    dotspacemacs-additional-packages '(clipmon)
    dotspacemacs-frozen-packages '()
@@ -118,6 +119,41 @@
    dotspacemacs-whitespace-cleanup nil
    dotspacemacs-pretty-docs nil))
 
+(defun keith-term-exec-1 (name buffer command switches)
+  ;; We need to do an extra (fork-less) exec to run stty.
+  ;; (This would not be needed if we had suitable Emacs primitives.)
+  ;; The 'if ...; then shift; fi' hack is because Bourne shell
+  ;; loses one arg when called with -c, and newer shells (bash,  ksh) don't.
+  ;; Thus we add an extra dummy argument "..", and then remove it.
+  (let ((process-environment
+	 (nconc
+	  (list
+	   (format "TERM=%s" term-term-name)
+	   (format "TERMINFO=%s" data-directory)
+	   (format term-termcap-format "TERMCAP="
+		   term-term-name term-height term-width)
+
+	   ;; This is for backwards compatibility with Bash 4.3 and earlier.
+	   ;; Remove this hack once Bash 4.4-or-later is common, because
+	   ;; it breaks './configure' of some packages that expect it to
+	   ;; say where to find EMACS.
+	   (format "EMACS=%s (term:%s)" emacs-version term-protocol-version)
+
+	   (format "INSIDE_EMACS=%s,term:%s" emacs-version term-protocol-version)
+	   (format "LINES=%d" term-height)
+	   (format "COLUMNS=%d" term-width)
+     "PSREADLINE_VTINPUT=1")
+	  process-environment))
+	(process-connection-type t)
+	;; We should suppress conversion of end-of-line format.
+	(inhibit-eol-conversion t)
+	;; The process's output contains not just chars but also binary
+	;; escape codes, so we need to see the raw output.  We will have to
+	;; do the decoding by hand on the parts that are made of chars.
+	(coding-system-for-read 'binary))
+    (apply 'start-process name buffer
+	   command switches)))
+
 (defun dotspacemacs/user-load ()
   (spacemacs|when-dumping
     (dolist (d (directory-files package-user-dir t nil 'nosort))
@@ -131,6 +167,8 @@
             (ignore-errors (load f t)))))))
   (spacemacs|when-dumping
     (yas-reload-all t))
+
+  (advice-add 'term-exec-1 :override #'keith-term-exec-1)
 
   (setq
    calendar-location-name "Seattle, WA"
@@ -154,6 +192,9 @@
    js-indent-level 2
    typescript-indent-level 2
    powershell-indent 2
+
+   explicit-shell-file-name "C:/Program Files/PowerShell/6/pwsh.exe"
+   shell-file-name "C:/Program Files/PowerShell/6/pwsh.exe"
 
    ispell-program-name "aspell"
 
