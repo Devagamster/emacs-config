@@ -6,24 +6,22 @@
    dotspacemacs-configuration-layer-path '()
 
    dotspacemacs-configuration-layers
-   `(
+   `(graphviz
      csharp
      vimscript
      csv
-     clojure
      yaml
      autohotkey
+     coffeescript
      typescript
-     c-c++
      csharp
+     yaml
      pdf
      markdown
      javascript
      rust
-     ruby
      html
      windows-scripts
-     racket
      helm
      auto-completion
      emacs-lisp
@@ -37,7 +35,7 @@
      personal
      evil-mini
      (evil-snipe :variables evil-snipe-enable-alternate-f-and-t-behaviors t))
-   dotspacemacs-additional-packages '(clipmon)
+   dotspacemacs-additional-packages '()
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages '()
    dotspacemacs-install-packages 'used-only))
@@ -119,41 +117,6 @@
    dotspacemacs-whitespace-cleanup nil
    dotspacemacs-pretty-docs nil))
 
-(defun keith-term-exec-1 (name buffer command switches)
-  ;; We need to do an extra (fork-less) exec to run stty.
-  ;; (This would not be needed if we had suitable Emacs primitives.)
-  ;; The 'if ...; then shift; fi' hack is because Bourne shell
-  ;; loses one arg when called with -c, and newer shells (bash,  ksh) don't.
-  ;; Thus we add an extra dummy argument "..", and then remove it.
-  (let ((process-environment
-	 (nconc
-	  (list
-	   (format "TERM=%s" term-term-name)
-	   (format "TERMINFO=%s" data-directory)
-	   (format term-termcap-format "TERMCAP="
-		   term-term-name term-height term-width)
-
-	   ;; This is for backwards compatibility with Bash 4.3 and earlier.
-	   ;; Remove this hack once Bash 4.4-or-later is common, because
-	   ;; it breaks './configure' of some packages that expect it to
-	   ;; say where to find EMACS.
-	   (format "EMACS=%s (term:%s)" emacs-version term-protocol-version)
-
-	   (format "INSIDE_EMACS=%s,term:%s" emacs-version term-protocol-version)
-	   (format "LINES=%d" term-height)
-	   (format "COLUMNS=%d" term-width)
-     "PSREADLINE_VTINPUT=1")
-	  process-environment))
-	(process-connection-type t)
-	;; We should suppress conversion of end-of-line format.
-	(inhibit-eol-conversion t)
-	;; The process's output contains not just chars but also binary
-	;; escape codes, so we need to see the raw output.  We will have to
-	;; do the decoding by hand on the parts that are made of chars.
-	(coding-system-for-read 'binary))
-    (apply 'start-process name buffer
-	   command switches)))
-
 (defun dotspacemacs/user-load ()
   (spacemacs|when-dumping
     (dolist (d (directory-files package-user-dir t nil 'nosort))
@@ -168,14 +131,7 @@
   (spacemacs|when-dumping
     (yas-reload-all t))
 
-  (advice-add 'term-exec-1 :override #'keith-term-exec-1)
-
   (setq
-   calendar-location-name "Seattle, WA"
-   calendar-latitude 47.667998
-   calendar-longitude -122.321062
-
-   default-truncate-lines t
    typescript-auto-indent-flag nil
 
    mouse-wheel-scroll-amount '(1 ((shift) . 5) ((control) . nil))
@@ -193,29 +149,8 @@
    typescript-indent-level 2
    powershell-indent 2
 
-   explicit-shell-file-name "C:/Program Files/PowerShell/6/pwsh.exe"
-   shell-file-name "C:/Program Files/PowerShell/6/pwsh.exe"
+   ispell-program-name "hunspell")
 
-   ispell-program-name "aspell"
-
-   magit-display-buffer-function
-   (lambda (buffer)
-     (display-buffer
-      buffer (if (and (derived-mode-p 'magit-mode)
-                      (memq (with-current-buffer buffer major-mode)
-                            '(magit-process-mode
-                              magit-revision-mode
-                              magit-diff-mode
-                              magit-stash-mode
-                              magit-status-mode)))
-                 nil
-               '(display-buffer-same-window))))
-
-   helm-ag-base-command "pt -e --nocolor --nogroup"
-
-   flycheck-check-syntax-automatically '())
-
-  (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol")
 
   (define-key evil-normal-state-map (kbd "<escape>") 'spacemacs/evil-search-clear-highlight)
   (defhydra hydra-scrolling ()
@@ -257,14 +192,8 @@
                     keith/window-left))))
 
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
-  (add-hook 'rust-mode-hook 'keith/disable-racer-eldoc)
+  (add-hook 'text-mode-hook 'spacemacs/toggle-truncate-lines-on)
   (spacemacs-buffer/goto-buffer))
-
-(defun dotspacemacs/user-config ()
-  (server-start))
-
-(defun keith/disable-racer-eldoc ()
-  (setq eldoc-documentation-function nil))
 
 (defun dotspacemacs/user-config ()
   (server-start))
@@ -308,22 +237,5 @@
   "Delete the selected frame. If the last one, kill-terminal"
   (condition-case nil (delete-frame) (error (save-buffers-kill-terminal))))
 
-(defun dotspacemacs/emacs-custom-settings ()
-  "Emacs custom settings.
-This is an auto-generated function, do not modify its content directly, use
-Emacs customize menu instead.
-This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(auctex-latexmk yasnippet-snippets yaml-mode ws-butler writeroom-mode winum which-key web-mode web-beautify volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package treemacs-projectile treemacs-evil toml-mode toc-org tide theme-changer tagedit symon string-inflection spaceline-all-the-icons smeargle slim-mode seeing-is-believing scss-mode sass-mode rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocop rspec-mode robe restart-emacs rbenv rake rainbow-delimiters racket-mode racer pug-mode prettier-js powershell popwin persp-mode pdf-tools password-generator paradox overseer orgit org-projectile org-present org-pomodoro org-mime org-download org-bullets org-brain open-junk-file omnisharp nameless move-text mmm-mode minitest markdown-toc magit-svn magit-gitflow macrostep lorem-ipsum livid-mode link-hint json-navigator json-mode js2-refactor js-doc indent-guide impatient-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-rtags helm-purpose helm-projectile helm-org-rifle helm-mode-manager helm-make helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate google-c-style golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-rust flycheck-rtags flycheck-pos-tip flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-snipe evil-org evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu emmet-mode elisp-slime-nav editorconfig dumb-jump dotenv-mode doom-modeline disaster diminish diff-hl define-word dactyl-mode csv-mode counsel-projectile company-web company-tern company-statistics company-rtags company-c-headers company-auctex column-enforce-mode clojure-snippets clipmon clean-aindent-mode clang-format cider-eval-sexp-fu cider chruby centered-cursor-mode cargo bundler browse-at-remote auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile ahk-mode aggressive-indent ace-link ace-jump-helm-line ac-ispell)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-)
+(setq custom-file "~/.spacemacs.d/custom.el")
+(load custom-file)
